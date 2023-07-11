@@ -18,6 +18,7 @@ class _PinScreen extends State<PinScreen> {
 
   var keyPadBtnWidth = 110.0;
   var keyPadBtnHeight = 80.0;
+  var pin = "1111";
 
   var firstPinselected;
   var secondPinselected;
@@ -45,6 +46,12 @@ class _PinScreen extends State<PinScreen> {
            break;
        }
        pinNumber.add(buttonNumber);
+       if (pinNumber.join() == pin){
+         Navigator.push(
+           context,
+           MaterialPageRoute(builder: (context) => const SucessScreen()),
+         );
+       }
      } else{
        print("Pin OverFlowed");
      }
@@ -447,15 +454,31 @@ class SucessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Second Route'),
+        title: const Text('Sucess'),
       ),
       body: Container(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go back!'),
-        ),
+        child:Column(
+          children: [
+            
+            Center(
+              child: Center(
+                child: Container(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Go back!'),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              child: Text("COrrect Pin"),
+            ),
+          ],
+        )
+
       ),
     );
   }
