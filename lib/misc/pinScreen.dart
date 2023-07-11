@@ -87,6 +87,12 @@ class _PinScreen extends State<PinScreen> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+              width: 70,
+              height: 70,
+              child:Image.network('https://cdn-icons-png.flaticon.com/128/4438/4438755.png'),
+            ),
            Container(
              padding: EdgeInsets.fromLTRB(9, 20, 8, 0),
                child:Text("Please enter your transaction PIN.",
