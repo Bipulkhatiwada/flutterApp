@@ -1,5 +1,9 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'dart:ui';
+
+import 'misc/pinScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +36,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var selected;
+  List<Color> colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+  ];
+  List<Color> changedColors = [
+    Colors.brown,
+    Colors.orange,
+    Colors.yellow,
+  ];
 
+  void buttonRecognizer(int buttonNumber) {
+    setState(() {
+        selected = buttonNumber;
+        switch (buttonNumber){
+          case 1:
+            colors[0] = changedColors[Random().nextInt(3)];
+          case 2:
+          colors[1] = changedColors[Random().nextInt(3)];
+        }
+    });
+  }
+  int randomNumberGenerator(){
+    Random random = Random();
+    int randomNumber = random.nextInt(3);
+    return randomNumber;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(height: 10),
                 Container(
                   width: 500,
-                  height: 300,
+                  height: 100,
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -88,45 +119,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   child: Row(
                     children: [
-                      SizedBox(width: 10),
-                      TextButton(
-                        child: Text(
-                          "Button 1",
-                          style: TextStyle(
-                              color: Colors.red,
-                            backgroundColor: Colors.cyan
-                          ),
-                        ),
-                        onPressed: (){
-                          print("Button 1");
-                        },
-                      ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 30),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // Set the background color
+                          backgroundColor: colors[0], // Set the background color
                         ),
                         child: const Text(
-                            "Button 2",
+                            "Pin Screen",
                         style: TextStyle(
-                          color: Colors.green
+                          color: Colors.white
                         ),
 
                         ),
                         onPressed: (){
-                          print("Button 2");
+                          buttonRecognizer(1);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const PinScreen()),
+                            );
                         },
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 100),
                       OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: colors[1], // Set the background color
+                        ),
                         child: const Text(
-                          "Button 3",
+                          "Button 2",
                           style: TextStyle(
-                              color: Colors.blue
+                              color: Colors.white
                           ),
                         ),
                         onPressed: (){
-                          print("Button 3");
+                          buttonRecognizer(2);
                         },
                       )
                     ],
@@ -149,11 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     borderRadius: BorderRadius.circular(88),
                   ),
                   child: Center(
-                    child: Text(
-                      "IOS",
+                    child: new Text(
+                      "Button - ${selected ?? ""} is selected",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 36,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
