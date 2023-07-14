@@ -1,7 +1,7 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'misc/pinScreen.dart';
 
@@ -10,25 +10,27 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ScreenUtilInit(
+      builder: (BuildContext context, Widget? child) => MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Login'),
       ),
-      home: const MyHomePage(title: 'Home Page'),
+      designSize: const Size(360, 640),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -36,157 +38,88 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selected;
-  List<Color> colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-  ];
-  List<Color> changedColors = [
-    Colors.brown,
-    Colors.orange,
-    Colors.yellow,
-  ];
 
-  void buttonRecognizer(int buttonNumber) {
-    setState(() {
-        selected = buttonNumber;
-        switch (buttonNumber){
-          case 1:
-            colors[0] = changedColors[Random().nextInt(3)];
-          case 2:
-          colors[1] = changedColors[Random().nextInt(3)];
-        }
-    });
-  }
-  int randomNumberGenerator(){
-    Random random = Random();
-    int randomNumber = random.nextInt(3);
-    return randomNumber;
+  Widget getTextField({required String hint}){
+    return TextField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius:BorderRadius.circular(8.r),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 16.h),
+        hintText: hint,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-          body: Container(
-            padding: EdgeInsets.all(10),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(10.w),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 500,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(4, 3),
-                      ),
-                    ],
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(88),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Android",
+                SizedBox(height: 53.h),
+                Text(
+                  "Sign up to this Page",
+                  style: TextStyle(fontSize: 18.sp),
+                ),
+                Wrap(
+                  children: [
+                    Text(
+                      "Already signed In? ",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                        color: Colors.grey,
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: 500,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(4, 3),
-                      ),
-                    ],
-                    color: Colors.deepPurple,
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 30),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: colors[0], // Set the background color
-                        ),
-                        child: const Text(
-                            "Pin Screen",
-                        style: TextStyle(
-                          color: Colors.white
-                        ),
-
-                        ),
-                        onPressed: (){
-                          buttonRecognizer(1);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const PinScreen()),
-                            );
-                        },
-                      ),
-                      SizedBox(width: 100),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: colors[1], // Set the background color
-                        ),
-                        child: const Text(
-                          "Button 2",
-                          style: TextStyle(
-                              color: Colors.white
-                          ),
-                        ),
-                        onPressed: (){
-                          buttonRecognizer(2);
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10), // Adding some spacing between containers
-                Container(
-                  width: 500,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(4, 3),
-                      ),
-                    ],
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(88),
-                  ),
-                  child: Center(
-                    child: new Text(
-                      "Button - ${selected ?? ""} is selected",
+                    Text(
+                      "Login",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                        color: Colors.blue,
                       ),
                     ),
+                  ],
+                ),
+                SizedBox(height: 34.sp),
+                getTextField(hint: "Enter Username"),
+                SizedBox(height: 24.h),
+                getTextField(hint: "Enter Password"),
+                SizedBox(height: 24.h),
+                getTextField(hint: "Enter Email"),
+                SizedBox(height: 24.h),
+                getTextField(hint: "Enter Pin"),
+                SizedBox(height: 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent, // Set the background color
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      "Sign Up",
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PinScreen()),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
           ),
-      );
+        ),
+      ),
+    );
   }
 }
